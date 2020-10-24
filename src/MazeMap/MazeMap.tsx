@@ -33,6 +33,7 @@ const MazeMap = (props: MazeMapProps) => {
                         return (
                             <div key={`cell-${rowIndex}${colIndex}`} className="maze-grid-item" style={{background: cellColor(col)}}>
                                 {
+                                    isEnd && isCurrentPos ? <i className='fas fa-flag-checkered icon'></i> :
                                     isCurrentPos ? <i className='fas fa-car-alt icon'></i> :
                                         isEnd && <i className='fas fa-bullseye icon'></i>
                                 }

@@ -38,16 +38,15 @@ type Action =
 const MazeReducer = (state: State, action: Action): State => {
     switch(action.type) {
         case ActionTypes.SetPosition: {
-            const { position, start, end } = action.value;
+            const { position, end } = action.value;
             let success = false;
             if(position[0] === end[0] && position[1] === end[1]) {
                 success = true;
             }
-            const newPos = success ? start : position;
-            localStorage.setItem('lastPos', JSON.stringify(newPos));
+            localStorage.setItem('lastPos', JSON.stringify(position));
             return {
                 ...state,
-                position: newPos,
+                position,
                 error: false,
                 success
             }
