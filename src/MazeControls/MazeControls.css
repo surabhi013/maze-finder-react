@@ -7,6 +7,6 @@
     margin-left: 50px;
 }
 
-.left {
-    margin: -25px;
+.center-row {
+    width: max-content;
 }

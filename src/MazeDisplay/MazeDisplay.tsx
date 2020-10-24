@@ -5,9 +5,9 @@ import './MazeDisplay.css';
 
 type Maze = {
     name: string;
-    map: number[][];
-    start: number[];
-    end: number[]
+    map: Array<Array<number>>;
+    start: Array<number>;
+    end: Array<number>;
 };
 
 type MazeDisplayProps = {
@@ -59,6 +59,7 @@ const MazeReducer = (state: State, action: Action): State => {
             }
         }
         case ActionTypes.Reset: {
+            localStorage.removeItem('lastPos');
             return {
                 ...state,
                 position: action.value,
@@ -83,6 +84,7 @@ const MazeDisplay = (props: MazeDisplayProps) => {
     };
 
     const [mazeState, dispatch] = React.useReducer(MazeReducer, initialState);
+    const { position, success, error } = mazeState;
 
     React.useEffect(() => {
         if(!lastPosition) {
@@ -91,8 +93,6 @@ const MazeDisplay = (props: MazeDisplayProps) => {
             dispatch({ type: ActionTypes.SetPosition, value: {position: JSON.parse(lastPosition), start, end, mazeIndex} });
         }
     }, [end, lastPosition, mazeIndex, start]);
-
-    const { position } = mazeState;
 
     const dispatchAction = React.useCallback((validMove: boolean, newPos: Array<number>): void => {
         if(validMove) {
@@ -129,50 +129,19 @@ const MazeDisplay = (props: MazeDisplayProps) => {
         }
     }, [map, position, dispatchAction]);
 
-    const cellColor = (value: number): string => {
-        if (value) {
-            return '#d9c429';
-        }
-        return '#63cf32'
-    }
-    console.log(cellColor);
-
     return (
         <div className="maze-container">
             <div className="messages">
-            {mazeState.success ? 
+            { success ? 
                 <div className="success">
                     Congratulations, you won!
                 </div> :
-                mazeState.error && <div className="error"> Invalid move! </div>
+                 error && <div className="error"> Invalid move! </div>
             }
             </div>
 
             <div className="maze-area">
                 <MazeMap grid={map} current={position} end={end}></MazeMap>
-                {/* <table className="maze">
-                    <tbody>
-                        {map.map((row, rowIndex) => 
-                            {
-                                return (
-                                <tr key={`row-${rowIndex}`}>
-                                    {row.map((col, colIndex) => {
-                                        const currentPos = position[0] === rowIndex && position[1] === colIndex;
-                                        const finalPos = end[0] === rowIndex && end[1] === colIndex;
-                                        return (
-                                            <td key={`col-${colIndex}`} style={{background: cellColor(col)}} className="maze-cell">
-                                                {
-                                                    currentPos ? <i className='fas fa-car-alt icon'></i> :
-                                                        finalPos && <i className='fas fa-bullseye icon'></i>
-                                                }
-                                            </td>
-                                        )}
-                                    )}
-                                </tr>
-                            )}
-                        )}
-                    </tbody>
-                </table> */}
             </div>
             
             <div className="maze-controls">

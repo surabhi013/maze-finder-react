@@ -1,7 +1,3 @@
-.maze {
-    border-spacing: 0px;
-}
-
 .messages {
     height: 50px;
     font-size: 25px;
@@ -16,6 +12,7 @@
     grid-area: controls;
     text-align: center;
     margin-left: 40px;
+    width: fit-content;
 }
 
 .maze-container {
@@ -30,13 +27,6 @@
 
 .error {
     color: red;
-}
-
-.maze-cell {
-    height: 60px;
-    width: 60px;
-    text-align: center;
-    border: 1px solid sandybrown;
 }
 
 .maze-reset {

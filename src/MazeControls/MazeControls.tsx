@@ -32,7 +32,7 @@ const MazeControls = (props: MazeControlProps) => {
     return (
         <div>
             <i className='fas fa-arrow-alt-circle-up arrow up' onClick={() => updatePosition('UP')}></i>
-            <div>
+            <div className='center-row'>
                 <i className='fas fa-arrow-alt-circle-left arrow left' onClick={() => updatePosition('LEFT')}></i>
                 <i className='fas fa-arrow-alt-circle-right arrow right' onClick={() => updatePosition('RIGHT')}></i>
             </div>

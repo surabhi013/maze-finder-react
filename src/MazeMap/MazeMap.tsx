@@ -2,12 +2,12 @@ import * as React from 'react';
 import './MazeMap.css';
 
 type MazeMapProps = {
-    grid: number[][];
-    current: number[];
-    end: number[];
+    grid: Array<Array<number>>;
+    current: Array<number>;
+    end: Array<number>;
 }
 
-const cellWidth = 60;
+const cellWidth = 50;
 const cellColor = (value: number): string => {
     if (value) {
         return '#d9c429';
@@ -16,7 +16,6 @@ const cellColor = (value: number): string => {
 }
 
 const MazeMap = (props: MazeMapProps) => {
-    console.log(props);
     const { grid, current, end } = props;
     const [ currentRow, currentCol ] = current;
     const [ endRow, endCol ] = end;
@@ -28,23 +27,19 @@ const MazeMap = (props: MazeMapProps) => {
         {
             grid.map((row, rowIndex) => {
                 return (
-                    
-                        row.map((col, colIndex) => {
-                            const isCurrentPos = currentRow === rowIndex && currentCol === colIndex;
-                            const isEnd = endRow === rowIndex && endCol === colIndex;
-                            return (
-                                <div key={`cell-${rowIndex}${colIndex}`} className="maze-grid-item" style={{background: cellColor(col)}}>
-                                    {
-                                        isCurrentPos ? <i className='fas fa-car-alt icon'></i> :
-                                            isEnd && <i className='fas fa-bullseye icon'></i>
-                                    }
-                                </div>
-                            )
-                        })
-                    
+                    row.map((col, colIndex) => {
+                        const isCurrentPos = currentRow === rowIndex && currentCol === colIndex;
+                        const isEnd = endRow === rowIndex && endCol === colIndex;
+                        return (
+                            <div key={`cell-${rowIndex}${colIndex}`} className="maze-grid-item" style={{background: cellColor(col)}}>
+                                {
+                                    isCurrentPos ? <i className='fas fa-car-alt icon'></i> :
+                                        isEnd && <i className='fas fa-bullseye icon'></i>
+                                }
+                            </div>
+                        )
+                    })  
                 )
-                
-                
             })
         }
         </div>
