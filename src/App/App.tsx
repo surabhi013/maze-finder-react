@@ -29,7 +29,7 @@ const App = () => {
                   })}
                 </select>
             </div>
-            <MazeDisplay maze={mazes[selectedMaze]} mazeIndex={selectedMaze} />
+            <MazeDisplay maze={mazes[selectedMaze]} index={selectedMaze}/>
         </div>
     )
 }

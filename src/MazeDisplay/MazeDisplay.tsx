@@ -12,7 +12,7 @@ type Maze = {
 
 type MazeDisplayProps = {
     maze: Maze;
-    mazeIndex: number;
+    index: number;
 }
 
 type State = {
@@ -29,7 +29,7 @@ enum ActionTypes {
 }
 
 type Action =
-    | { type: ActionTypes.SetPosition; value: {position: Array<number>, start: Array<number>, end: Array<number>, mazeIndex: number} }
+    | { type: ActionTypes.SetPosition; value: { position: Array<number>, end: Array<number>, start: Array<number> } }
     | { type: ActionTypes.Reset; value: Array<number> }
     | { type: ActionTypes.SetSuccess }
     | { type: ActionTypes.SetError };
@@ -38,12 +38,14 @@ type Action =
 const MazeReducer = (state: State, action: Action): State => {
     switch(action.type) {
         case ActionTypes.SetPosition: {
-            const { position, end } = action.value;
+            const { position, end, start } = action.value;
             let success = false;
             if(position[0] === end[0] && position[1] === end[1]) {
                 success = true;
+                localStorage.setItem('lastPos', JSON.stringify(start));
+            } else {
+                localStorage.setItem('lastPos', JSON.stringify(position));
             }
-            localStorage.setItem('lastPos', JSON.stringify(position));
             return {
                 ...state,
                 position,
@@ -71,8 +73,16 @@ const MazeReducer = (state: State, action: Action): State => {
     }
 }
 
+const dispatchAction = (validMove: boolean, newPos: Array<number>, dispatch: Function, end: Array<number>, start?: Array<number>): void => {
+    if(validMove) {
+        dispatch({ type: ActionTypes.SetPosition, value: {position: newPos, end, start} });
+    } else {
+        dispatch({ type: ActionTypes.SetError });
+    }
+};
+
 const MazeDisplay = (props: MazeDisplayProps) => {
-    const { maze, mazeIndex } = props;
+    const { maze, index } = props;
     const { start, end, map } = maze;
     const lastPosition = localStorage.getItem('lastPos');
 
@@ -86,20 +96,12 @@ const MazeDisplay = (props: MazeDisplayProps) => {
     const { position, success, error } = mazeState;
 
     React.useEffect(() => {
-        if(!lastPosition) {
+        const lastIndex = localStorage.getItem('selectedMaze');
+        const lastPos = localStorage.getItem('lastPos');
+        if(lastIndex && !lastPos && index === parseInt(lastIndex)) {
             dispatch({type: ActionTypes.Reset, value: start});
-        } else {
-            dispatch({ type: ActionTypes.SetPosition, value: {position: JSON.parse(lastPosition), start, end, mazeIndex} });
         }
-    }, [end, lastPosition, mazeIndex, start]);
-
-    const dispatchAction = React.useCallback((validMove: boolean, newPos: Array<number>): void => {
-        if(validMove) {
-            dispatch({ type: ActionTypes.SetPosition, value: {position: newPos, start, end, mazeIndex} });
-        } else {
-            dispatch({ type: ActionTypes.SetError });
-        }
-    }, [end, mazeIndex, start]);
+    }, [index, start]);
 
     const updatePosition = React.useCallback((action: string) => {
         let validMove, newPos;
@@ -108,25 +110,25 @@ const MazeDisplay = (props: MazeDisplayProps) => {
             case 'UP':
                 validMove = row !== 0 && map[row - 1][col] === 1;
                 newPos = [row - 1, col];
-                dispatchAction(validMove, newPos);
+                dispatchAction(validMove, newPos, dispatch, end, start);
                 break;
             case 'DOWN':
                 validMove = row !== map.length - 1 && map[row + 1][col] === 1;
                 newPos = [row + 1, col];
-                dispatchAction(validMove, newPos);
+                dispatchAction(validMove, newPos, dispatch, end, start);
                 break;
             case 'LEFT':
                 validMove = col !== 0 && map[row][col - 1] === 1;
                 newPos = [row, col - 1];
-                dispatchAction(validMove, newPos);
+                dispatchAction(validMove, newPos,dispatch ,end, start);
                 break;
             case 'RIGHT':
                 validMove = col !== map[0].length + 1 && map[row][col + 1] === 1;
                 newPos = [row, col + 1];
-                dispatchAction(validMove, newPos);
+                dispatchAction(validMove, newPos, dispatch, end, start);
                 break;
         }
-    }, [map, position, dispatchAction]);
+    }, [position, map, end, start]);
 
     return (
         <div className="maze-container">
