@@ -1,0 +1,46 @@
+.maze {
+    border-spacing: 0px;
+}
+
+.messages {
+    height: 50px;
+    font-size: 25px;
+    grid-area: messages;
+}
+
+.maze-area {
+    grid-area: map;
+}
+
+.maze-controls {
+    grid-area: controls;
+    text-align: center;
+    margin-left: 40px;
+}
+
+.maze-container {
+    display: grid;
+    grid-template-areas: 'messages messages messages messages'
+    'map map map controls';
+}
+
+.success {
+    color: green;
+}
+
+.error {
+    color: red;
+}
+
+.maze-cell {
+    height: 60px;
+    width: 60px;
+    text-align: center;
+    border: 1px solid sandybrown;
+}
+
+.maze-reset {
+    padding: 5px;
+    background-color: white;
+    margin-top: 20px;
+}

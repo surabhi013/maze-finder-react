@@ -1,0 +1,16 @@
+.maze-grid-container {
+    display: grid;
+    gap: 1px;
+    background-color: sandybrown;
+}
+
+.maze-grid-item {
+    width: 60px;
+    height: 60px;
+    text-align: center;
+}
+
+.icon {
+    color: red;
+    font-size: 50px;
+}

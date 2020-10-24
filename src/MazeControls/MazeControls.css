@@ -1,0 +1,12 @@
+.arrow {
+    font-size: 48px;
+    color: black;
+}
+
+.right {
+    margin-left: 50px;
+}
+
+.left {
+    margin: -25px;
+}
